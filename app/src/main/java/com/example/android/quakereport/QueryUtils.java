@@ -53,7 +53,7 @@ public final class QueryUtils {
             // build up a list of Earthquake objects with the corresponding data.
             JSONObject root = new JSONObject (SAMPLE_JSON_RESPONSE);
             JSONArray jsonArray= root.getJSONArray("features");
-            for(int index =0; index> jsonArray.length();index++){
+            for(int index =0; index < jsonArray.length();index++){
                 JSONObject cases = jsonArray.getJSONObject(index);
                 JSONObject info =cases.getJSONObject("properties");
 
