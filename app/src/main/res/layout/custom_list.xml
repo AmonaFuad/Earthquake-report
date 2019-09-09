@@ -19,6 +19,7 @@
         android:layout_weight="1"
         android:id="@+id/location_text_view"
         tools:text="San Francesco"
+        android:paddingRight="5dp"
         >
 
     </TextView>
@@ -27,7 +28,17 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:id="@+id/date_text_view"
-        tools:text="march 5">
+        tools:text="march 5"
+     >
+
+    </TextView>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/time_text_view"
+        tools:text="march 5"
+        android:paddingLeft="10dp">
 
     </TextView>
 </LinearLayout>
