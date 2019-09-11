@@ -7,17 +7,19 @@ public class EarthquakeCustomClass {
     // declare the information we need and make them private
     private String mmagnitude ;
     private String mlocation ;
-    private String mdate ;
+    private long mTimeInMilliseconds;
+
     /**
     // create a constructor with three parameters
      * @param magnitude is magnitude size of earthquake
      * @param location  is location ot earthquake
-     * @param date  is date when earthquake happen
+     * @param TimeInMilliseconds  is date when earthquake happen
      **/
-    public EarthquakeCustomClass (String magnitude ,String location ,String date  ){
+    public EarthquakeCustomClass(String magnitude, String location, long TimeInMilliseconds) {
 mmagnitude=magnitude;
 mlocation=location;
-mdate=date;
+        mTimeInMilliseconds = TimeInMilliseconds;
+
     }
     // method to return the magnitude of earthquake
     public String getmagnitude (){
@@ -29,8 +31,8 @@ mdate=date;
     }
 
     // method to return the date of earthquake
-    public String getMdate (){
-        return mdate;
+    public long getTimeInMilliseconds() {
+        return mTimeInMilliseconds;
     }
 
 

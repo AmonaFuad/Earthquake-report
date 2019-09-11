@@ -2,14 +2,11 @@ package com.example.android.quakereport;
 
 import android.util.Log;
 
-import com.example.android.quakereport.EarthquakeCustomClass;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
 /**
  * Helper methods related to requesting and receiving earthquake data from USGS.
  */
@@ -39,40 +36,55 @@ public final class QueryUtils {
      * Return a list of {@link EarthquakeCustomClass} objects that has been built up from
      * parsing a JSON response.
      */
-    public static ArrayList<EarthquakeCustomClass> extractEarthquakes() {
+
+
+    public static ArrayList <EarthquakeCustomClass> extractEarthquakes() {
+
 
         // Create an empty ArrayList that we can start adding earthquakes to
-        ArrayList<EarthquakeCustomClass> earthquakes = new ArrayList<>();
+        ArrayList <EarthquakeCustomClass> earthquakes = new ArrayList <EarthquakeCustomClass>();
+
 
         // Try to parse the SAMPLE_JSON_RESPONSE. If there's a problem with the way the JSON
         // is formatted, a JSONException exception object will be thrown.
         // Catch the exception so the app doesn't crash, and print the error message to the logs.
+        // Convert SAMPLE_JSON_RESPONSE String into a JSONObject;
         try {
+            JSONObject root = new JSONObject(SAMPLE_JSON_RESPONSE);
 
             // TODO: Parse the response given by the SAMPLE_JSON_RESPONSE string and
             // build up a list of Earthquake objects with the corresponding data.
-            JSONObject root = new JSONObject (SAMPLE_JSON_RESPONSE);
-            JSONArray jsonArray= root.getJSONArray("features");
-            for(int index =0; index < jsonArray.length();index++){
-                JSONObject cases = jsonArray.getJSONObject(index);
-                JSONObject info =cases.getJSONObject("properties");
+            // Extract “features” JSONArray
+            JSONArray earthFeatures = root.getJSONArray("features");
+            //Loop through each feature in the array
+            for (int index = 0; index < earthFeatures.length(); index++) {
+                //Get earthquake JSONObject at position i
+                JSONObject getEachObjectsPosition = earthFeatures.getJSONObject(index);
+                //Get “properties” JSONObject
+                JSONObject getProperties = getEachObjectsPosition.getJSONObject("properties");
+                //Extract “mag” for magnitude
+                String magnitude = getProperties.getString("mag");
+                // Extract “place” for location
+                String location = getProperties.getString("place");
+                // Extract “date” for time
 
-                String mag=info.getString("mag");
-                String location =info.getString("place");
-                String date =info.getString("time");
-                EarthquakeCustomClass  earthquakeCustomClass= new EarthquakeCustomClass(mag, location, date);
-                earthquakes.add(earthquakeCustomClass);
+
+                long dateToDisplay = getProperties.getLong("time");
+
+                earthquakes.add(new EarthquakeCustomClass(magnitude, location, dateToDisplay));
             }
-
         } catch (JSONException e) {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
+
+            e.printStackTrace();
             Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
         }
 
         // Return the list of earthquakes
         return earthquakes;
     }
+
 
 }

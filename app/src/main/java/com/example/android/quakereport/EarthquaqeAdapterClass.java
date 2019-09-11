@@ -1,17 +1,15 @@
 package com.example.android.quakereport;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.Date;
 
 /**
  * An {@link EarthquaqeAdapterClass} knows how to create a list item layout for each earthquake
@@ -23,6 +21,7 @@ import java.util.Objects;
 
 public class EarthquaqeAdapterClass extends ArrayAdapter <EarthquakeCustomClass> {
 
+
     /**
      * Constructs a new {@link EarthquaqeAdapterClass}.
      *
@@ -31,6 +30,22 @@ public class EarthquaqeAdapterClass extends ArrayAdapter <EarthquakeCustomClass>
      */
     public EarthquaqeAdapterClass(Context context, ArrayList <EarthquakeCustomClass> earthquakeInfo) {
         super(context, 0, earthquakeInfo);
+    }
+
+    /**
+     * Return the formatted date string (i.e. "Mar 3, 1984") from a Date object.
+     */
+    private String formatDate(Date dateObject) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("LLL dd, yyyy");
+        return dateFormat.format(dateObject);
+    }
+
+    /**
+     * Return the formatted date string (i.e. "4:30 PM") from a Date object.
+     */
+    private String formatTime(Date dateObject) {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+        return timeFormat.format(dateObject);
     }
 
     /**
@@ -50,19 +65,43 @@ public class EarthquaqeAdapterClass extends ArrayAdapter <EarthquakeCustomClass>
         EarthquakeCustomClass getInfo = getItem(position);
 
         // Find the TextView with view ID magnitude
-        TextView magnituedTextView = (TextView) listItemView.findViewById(R.id.magnitude_text_view);
+        TextView magnituedTextView = listItemView.findViewById(R.id.magnitude_text_view);
         // Display the magnitude of the current earthquake in that TextView
         magnituedTextView.setText(getInfo.getmagnitude());
 
         // Find the TextView with view ID location
-        TextView locationTextView = (TextView) listItemView.findViewById(R.id.location_text_view);
+        TextView firstLocationTextView = listItemView.findViewById(R.id.firstLocation_text_view);
         // Display the location of the current earthquake in that TextView
-        locationTextView.setText(getInfo.getlocation());
+        String currentLocation = getInfo.getlocation();
+        String substr = "of";
+        String before = currentLocation.substring(0, currentLocation.indexOf(substr) + 2);
+        String[] separatedString1 = currentLocation.split("of");
 
+        firstLocationTextView.setText(before);
+
+        // Find the TextView with view ID location
+        TextView secondLocationTextView = listItemView.findViewById(R.id.secondLocation_text_view);
+        // Display the location of the current earthquake in that TextView
+        currentLocation = getInfo.getlocation();
+        String[] separatedString2 = currentLocation.split("of");
+
+        secondLocationTextView.setText(separatedString2[1]);
+
+
+        // Create a new Date object from the time in milliseconds of the earthquake
+        Date dateObject = new Date(getInfo.getTimeInMilliseconds());
       // Find the TextView with view ID date
-        TextView dateTextView = (TextView) listItemView.findViewById(R.id.date_text_view);
+        TextView dateTextView = listItemView.findViewById(R.id.date_text_view);
         // Display the date of the current earthquake in that TextView
-        dateTextView.setText(getInfo.getMdate());
+        String formattedDate = formatDate(dateObject);
+        dateTextView.setText(formattedDate);
+
+        // Find the TextView with view ID time
+        TextView timeTextView = listItemView.findViewById(R.id.time_text_view);
+// Display the date of the current earthquake in that TextView
+        String formatedTime = formatTime(dateObject);
+        timeTextView.setText(formatedTime);
+
 
         return listItemView;
     }
